@@ -20,6 +20,7 @@ const YearPicker: React.FC<YearPickerInterface> = ({ label, year, setYear}) => {
           name={label?.toLowerCase()}
           openTo="year"
           value={year}
+          // @ts-ignore
           onChange={(newValue) => setYear(newValue)}
         />
       </DemoContainer>
