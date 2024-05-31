@@ -12,9 +12,11 @@ import { useDispatch } from "react-redux";
 import { addSkills, deleteSkill } from "../../store/slices/profile.slice";
 import { Close } from "@mui/icons-material";
 
+const token = localStorage.getItem("token");
+
 interface SkillSetProps {
   skills: string[];
-  onUpdate: () => void;
+  onUpdate: (token: string) => void;
 }
 
 const SkillSets: React.FC<SkillSetProps> = ({ skills, onUpdate }) => {
@@ -37,10 +39,12 @@ const SkillSets: React.FC<SkillSetProps> = ({ skills, onUpdate }) => {
 
     // @ts-ignore
     dispatch(addSkills(payload)).then(() => {
-      // Re-fetch skills after adding
-      onUpdate();
-      setSkillFlag(false); // Close the form after submission
-      setSkill(""); // Clear the input field
+      if (token) {
+        // Re-fetch skills after adding
+        onUpdate(token);
+        setSkillFlag(false); // Close the form after submission
+        setSkill(""); // Clear the input field
+      }
     });
   }
 
@@ -52,8 +56,10 @@ const SkillSets: React.FC<SkillSetProps> = ({ skills, onUpdate }) => {
 
     // @ts-ignore
     dispatch(deleteSkill(payload)).then(() => {
-      // Re-fetch skills after deleting
-      onUpdate();
+      if (token) {
+        // Re-fetch skills after deleting
+        onUpdate(token);
+      }
     });
   }
 

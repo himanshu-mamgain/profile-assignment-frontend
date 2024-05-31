@@ -16,13 +16,8 @@ import PastExperience from "../../components/past-experience/PastExperience";
 
 const Profile: React.FC = () => {
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
 
-  const { profileData, skillProfile, profileDetails } = useSelector(
-    (state: { profile: any }) => state.profile
-  );
-
-  const fetchAllProfileData = () => {
+  const fetchAllProfileData = (token: string) => {
     // @ts-ignore
     dispatch(fetchProfile(token));
     // @ts-ignore
@@ -32,13 +27,20 @@ const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchAllProfileData();
+    const token = localStorage.getItem("token");
+    if(token) {
+      fetchAllProfileData(token);
+    }
   }, []);
+
+  const { profileData, skillProfile, profileDetails } = useSelector(
+    (state: { profile: any }) => state.profile
+  );
 
   return (
     <Container maxWidth="lg">
       <Header />
-      {profileData && (
+      {profileData && skillProfile && profileDetails ? (
         <>
           <BasicDetails data={profileData} photo={skillProfile?.photo} />
           <SkillSets skills={skillProfile?.skills} onUpdate={fetchAllProfileData} />
@@ -47,7 +49,7 @@ const Profile: React.FC = () => {
           />
           <PastExperience experienceDetails={profileDetails?.experience}  onUpdate={fetchAllProfileData} />
         </>
-      )}
+      ): null}
     </Container>
   );
 };

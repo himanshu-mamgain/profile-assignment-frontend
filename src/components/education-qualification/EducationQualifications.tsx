@@ -7,7 +7,7 @@ import EducationDetails from "../education-details/EducationDetails";
 
 const EducationQualifications: React.FC<{
   educationDetails: EducationDetailsData[];
-  onUpdate: () => void;
+  onUpdate: (token: string) => void;
 }> = ({ educationDetails, onUpdate }) => {
   const [addFlag, setAddFlag] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);

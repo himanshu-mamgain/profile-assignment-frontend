@@ -14,7 +14,7 @@ interface PastExperienceFormProps {
   buttonTitle: string;
   experienceId?: string;
   handleCancelClick: () => void;
-  onUpdate: () => void;
+  onUpdate: (token: string) => void;
 }
 
 export interface ExperienceDetails {
@@ -73,18 +73,20 @@ const PastExperienceForm: React.FC<PastExperienceFormProps> = ({
       experience,
     };
 
-    if (buttonTitle.toLowerCase() === "update") {
-      payload.experienceId = experienceId;
+    if (token) {
+      if (buttonTitle.toLowerCase() === "update") {
+        payload.experienceId = experienceId;
 
-      // @ts-ignore
-      dispatch(updateExperience(payload)).then(() => {
-        onUpdate();
-      });
-    } else {
-      // @ts-ignore
-      dispatch(addExperience(payload)).then(() => {
-        onUpdate();
-      });
+        // @ts-ignore
+        dispatch(updateExperience(payload)).then(() => {
+          onUpdate(token);
+        });
+      } else {
+        // @ts-ignore
+        dispatch(addExperience(payload)).then(() => {
+          onUpdate(token);
+        });
+      }
     }
 
     setExperience({

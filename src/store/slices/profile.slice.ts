@@ -42,7 +42,6 @@ export const fetchProfile = createAsyncThunk(
       toast.error(response.message);
     } catch (err: any) {
       console.error(err?.message);
-      toast.error(err?.message);
     }
   }
 );

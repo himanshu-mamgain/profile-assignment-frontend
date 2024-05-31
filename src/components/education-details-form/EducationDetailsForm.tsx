@@ -14,7 +14,7 @@ interface EducationDetailsFormProps {
   buttonTitle: string;
   educationId?: string;
   handleCancelClick: () => void;
-  onUpdate: () => void;
+  onUpdate: (token: string) => void;
 }
 
 export interface EducationDetails {
@@ -78,10 +78,10 @@ const EducationDetailsForm: React.FC<EducationDetailsFormProps> = ({
     if (buttonTitle.toLowerCase() === "update") {
       payload.educationId = educationId;
       // @ts-ignore
-      dispatch(updateEducation(payload)).then(() => onUpdate());
+      dispatch(updateEducation(payload)).then(() => onUpdate(token));
     } else {
       // @ts-ignore
-      dispatch(addEducation(payload)).then(() => onUpdate());
+      dispatch(addEducation(payload)).then(() => onUpdate(token));
     }
 
     setEducation({

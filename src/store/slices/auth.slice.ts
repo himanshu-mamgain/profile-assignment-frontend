@@ -22,6 +22,7 @@ export const loginUser = createAsyncThunk("loginUser", async (body) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
+      credentials: "include"
     });
 
     const response = await data.json();
@@ -103,6 +104,7 @@ export const checkLogin = createAsyncThunk(
         return response;
       }
 
+      localStorage.removeItem("token");
       toast.error(response.message);
     } catch (err: any) {
       console.error(err?.message);
@@ -121,18 +123,19 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginUser.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.isLoading = false;
-      localStorage.setItem("token", action.payload.accessToken);
-      localStorage.setItem("userId", action.payload.userId);
-      state.isLoggedIn = true;
-    });
-    builder.addCase(loginUser.rejected, (state) => {
-      state.isError = true;
-    });
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        localStorage.setItem("token", action.payload.accessToken);
+        localStorage.setItem("userId", action.payload.userId);
+        state.isLoggedIn = true;
+      })
+      .addCase(loginUser.rejected, (state) => {
+        state.isError = true;
+      });
 
     // register user
     builder.addCase(registerUser.pending, (state) => {
@@ -161,17 +164,19 @@ const authSlice = createSlice({
     });
 
     // check login
-    builder.addCase(checkLogin.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(checkLogin.fulfilled, (state) => {
-      state.isLoading = false;
-      state.isLoggedIn = true;
-      state.isVerified = true;
-    });
-    builder.addCase(checkLogin.rejected, (state) => {
-      state.isError = true;
-    });
+    builder
+      .addCase(checkLogin.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(checkLogin.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isLoggedIn = true;
+        state.isVerified = true;
+      })
+      .addCase(checkLogin.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
   },
 });
 

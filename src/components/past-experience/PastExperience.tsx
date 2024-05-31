@@ -7,7 +7,7 @@ import PastExperienceDetails from "../past-experience-details/PastExperienceDeta
 
 const PastExperience: React.FC<{
   experienceDetails: ExperienceDetailsData[];
-  onUpdate: () => void;
+  onUpdate: (token: string) => void;
 }> = ({ experienceDetails, onUpdate }) => {
   const [addFlag, setAddFlag] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
