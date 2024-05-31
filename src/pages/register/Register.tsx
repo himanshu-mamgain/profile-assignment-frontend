@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-// import { useFormik } from "formik";
-import * as yup from "yup";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -64,7 +62,7 @@ const Register: React.FC = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign In
+          Sign Up
         </Typography>
         <Paper sx={{ m: 2, p: 3 }}>
           <Box

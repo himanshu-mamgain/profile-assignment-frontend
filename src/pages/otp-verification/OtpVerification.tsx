@@ -31,8 +31,9 @@ const OtpVerification: React.FC = () => {
     newOtp[index] = e.target.value;
     setOtp(newOtp);
 
-    if (e.target.nextSibling && e.target.value) {
-      (e.target.nextSibling as HTMLInputElement).focus();
+    // Move focus to the next input element if a value is entered
+    if (e.target.value && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
@@ -98,10 +99,12 @@ const OtpVerification: React.FC = () => {
                 <TextField
                   key={index}
                   value={data}
-                  // @ts-ignore
-                  onChange={(e) => handleChange(e, index)}
-                  // @ts-ignore
-                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleChange(e, index)
+                  }
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                    handleKeyDown(e, index)
+                  }
                   inputProps={{
                     maxLength: 1,
                     style: { textAlign: "center" },

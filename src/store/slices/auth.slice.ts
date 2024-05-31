@@ -104,7 +104,6 @@ export const checkLogin = createAsyncThunk(
         return response;
       }
 
-      localStorage.removeItem("token");
       toast.error(response.message);
     } catch (err: any) {
       console.error(err?.message);
@@ -129,8 +128,9 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        localStorage.setItem("token", action.payload.accessToken);
+        console.log("token--->", action.payload)
         localStorage.setItem("userId", action.payload.userId);
+        localStorage.setItem("token", action.payload.accessToken);
         state.isLoggedIn = true;
       })
       .addCase(loginUser.rejected, (state) => {

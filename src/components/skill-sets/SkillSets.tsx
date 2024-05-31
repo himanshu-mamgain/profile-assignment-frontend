@@ -12,8 +12,6 @@ import { useDispatch } from "react-redux";
 import { addSkills, deleteSkill } from "../../store/slices/profile.slice";
 import { Close } from "@mui/icons-material";
 
-const token = localStorage.getItem("token");
-
 interface SkillSetProps {
   skills: string[];
   onUpdate: (token: string) => void;
@@ -24,6 +22,7 @@ const SkillSets: React.FC<SkillSetProps> = ({ skills, onUpdate }) => {
   const [skill, setSkill] = useState<string>("");
 
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSkill(event.target.value);
@@ -98,9 +97,18 @@ const SkillSets: React.FC<SkillSetProps> = ({ skills, onUpdate }) => {
               value={skill}
               onChange={handleChange}
             />
-            <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-              Submit
-            </Button>
+            <Box sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
+              <Button type="submit" variant="contained" disabled={!skill}>
+                Submit
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setSkillFlag(false)}
+              >
+                Cancel
+              </Button>
+            </Box>
           </Box>
         ) : (
           <Button variant="contained" onClick={() => setSkillFlag(true)}>

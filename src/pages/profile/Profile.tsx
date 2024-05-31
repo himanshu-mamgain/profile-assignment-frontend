@@ -28,7 +28,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token) {
+    if (token) {
       fetchAllProfileData(token);
     }
   }, []);
@@ -40,16 +40,23 @@ const Profile: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Header />
-      {profileData && skillProfile && profileDetails ? (
+      {profileData && (
         <>
           <BasicDetails data={profileData} photo={skillProfile?.photo} />
-          <SkillSets skills={skillProfile?.skills} onUpdate={fetchAllProfileData} />
-          <EducationQualifications
-            educationDetails={profileDetails?.education}  onUpdate={fetchAllProfileData}
+          <SkillSets
+            skills={skillProfile?.skills}
+            onUpdate={fetchAllProfileData}
           />
-          <PastExperience experienceDetails={profileDetails?.experience}  onUpdate={fetchAllProfileData} />
+          <EducationQualifications
+            educationDetails={profileDetails?.education}
+            onUpdate={fetchAllProfileData}
+          />
+          <PastExperience
+            experienceDetails={profileDetails?.experience}
+            onUpdate={fetchAllProfileData}
+          />
         </>
-      ): null}
+      )}
     </Container>
   );
 };

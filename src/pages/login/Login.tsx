@@ -46,12 +46,12 @@ export default function Login() {
     dispatch(loginUser(formData));
   };
 
-  useEffect(() => {
-    if (token) {
-      // @ts-ignore
-      dispatch(checkLogin());
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (token) {
+  //     // @ts-ignore
+  //     dispatch(checkLogin());
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     if (isLoggedIn) {
