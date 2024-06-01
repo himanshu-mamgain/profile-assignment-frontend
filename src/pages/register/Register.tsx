@@ -1,47 +1,73 @@
-import { useEffect, useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import { useEffect } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import Password from "../../components/password/Password";
 import AuthLink from "../../components/auth-link/AuthLink";
-import { Paper } from "@mui/material";
+import RememberMe from "../../components/remember-me/RememberMe";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../store/slices/auth.slice";
 import { useNavigate } from "react-router";
 
+const validationSchema = yup.object({
+  name: yup
+    .string()
+    .min(2, "Please enter valid name")
+    .required("Name is required"),
+  email: yup
+    .string()
+    .email("Enter a valid email")
+    .required("Email is required"),
+  phone: yup
+    .string()
+    .min(10, "Enter a valid mobile number")
+    .required("Phone is required"),
+  password: yup
+    .string()
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Password is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Password must match")
+    .required("Confirm Password is required"),
+});
+
 const Register: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      // @ts-ignore
+      dispatch(registerUser(values));
+    },
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // @ts-ignore
-    dispatch(registerUser(formData));
-  };
+  //   // @ts-ignore
+  //   dispatch(registerUser(formData));
+  // };
 
   useEffect(() => {
     if (userId) {
@@ -68,7 +94,7 @@ const Register: React.FC = () => {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={formik.handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -76,51 +102,79 @@ const Register: React.FC = () => {
                 <TextField
                   autoComplete="given-name"
                   name="name"
-                  required
                   fullWidth
                   id="name"
                   label="Enter Your Name"
                   autoFocus
-                  onChange={handleChange}
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
                   id="email"
                   label="Email Address"
                   type="email"
                   name="email"
                   autoComplete="email"
-                  onChange={handleChange}
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
-                  id="mobile"
+                  id="phone"
                   label="Phone Number"
                   name="phone"
                   autoComplete="mobile"
-                  onChange={handleChange}
+                  value={formik.values.phone}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.phone && Boolean(formik.errors.phone)}
+                  helperText={formik.touched.phone && formik.errors.phone}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Password name="Password" onChange={handleChange} />
-              </Grid>
-              <Grid item xs={12}>
-                <Password name="Confirm Password" onChange={handleChange} />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                <Password
+                  id="password"
+                  name="password"
+                  label="Password"
+                  value={formik.values.password}
+                  handleChange={formik.handleChange}
+                  handleBlur={formik.handleBlur}
+                  error={
+                    formik.touched.password && Boolean(formik.errors.password)
                   }
-                  label="Remember Me"
+                  helperText={formik.touched.password && formik.errors.password}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Password
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  value={formik.values.confirmPassword}
+                  handleChange={formik.handleChange}
+                  handleBlur={formik.handleBlur}
+                  error={
+                    formik.touched.confirmPassword &&
+                    Boolean(formik.errors.confirmPassword)
+                  }
+                  helperText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
+                />
+              </Grid>
+              <RememberMe />
             </Grid>
             <Button
               type="submit"
