@@ -1,0 +1,8 @@
+version: '3'
+services:
+  profile-ui:
+    image: 008971675228.dkr.ecr.us-east-1.amazonaws.com/profile/ui:latest
+    ports: 
+      - 5173:5173
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
